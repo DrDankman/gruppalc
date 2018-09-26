@@ -12,11 +12,11 @@
 			<form action="login.php" method="POST">
 				<p>
 					<label for="username">Användarnamn: </label>
-					<input type="text" name="username" id="username">
+					<input type="text" name="username" id="username" required>
 				</p>
 				<p>
 					<label for="password">Lösenord: </label>
-					<input type="password" name="password" id="password">
+					<input type="password" name="password" id="password" required>
 				</p>
 				<p>
 					<input type="submit" name="submit" id="submit" value="Logga in">
