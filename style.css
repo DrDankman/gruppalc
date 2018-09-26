@@ -1,0 +1,10 @@
+fieldset {
+    font-family: 'Josefin Slab', 'Times';
+    width: 28%;
+    margin: auto;
+    margin-top: 8%;
+    padding-left: 10%;
+}
+#register {
+	display: none;
+}
