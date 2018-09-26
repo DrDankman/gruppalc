@@ -1,6 +1,3 @@
-<?php 
-	session_start();
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,18 +9,20 @@
 <body>
 		<fieldset>
 			<legend>Logga in</legend>
-			<p>
-				<label for="username">Användarnamn: </label>
-				<input type="text" name="username" id="username">
-			</p>
-			<p>
-				<label for="password">Lösenord: </label>
-				<input type="password" name="password" id="password">
-			</p>
-			<p>
-				<input type="submit" name="submit" id="submit" value="Logga in">
-				<button onclick="" id="registerbutton">Registrera</button>
-			</p>
+			<form action="login.php" method="POST">
+				<p>
+					<label for="username">Användarnamn: </label>
+					<input type="text" name="username" id="username">
+				</p>
+				<p>
+					<label for="password">Lösenord: </label>
+					<input type="password" name="password" id="password">
+				</p>
+				<p>
+					<input type="submit" name="submit" id="submit" value="Logga in">
+					<button onclick="" id="registerbutton">Registrera</button>
+				</p>
+			</form>
 		</fieldset>
 		<div id="register">   
 			<fieldset>
@@ -50,12 +49,5 @@
 		</fieldset>
 		</div>
 	<script src="script.js"></script>
-
-<?php
-	
-	
-
-?>
-
 </body>
 </html>
