@@ -26,27 +26,29 @@
 		</fieldset>
 		<div id="register">   
 			<fieldset>
-			<legend>Registrera</legend>
-			<p>
-				<label for="username">Användarnamn: </label>
-				<input type="text" name="username" id="username">
-			</p>
-			<p>
-				<label for="password">Lösenord: </label>
-				<input type="password" name="password" id="password">
-			</p>
-			<p>
-				<label for="password2">Bekräfta Lösenord: </label>
-				<input type="password" name="password" id="password">
-			</p>
-			<p>
-				<label for="email">E-postadress: </label>
-				<input type="text" name="email" id="email">
-			</p>
-			<p>
-				<input type="submit" name="submit" id="submit" value="Slutför">
-			</p>
-		</fieldset>
+				<legend>Registrera</legend>
+				<form action="register.php" method="POST">
+					<p>
+						<label for="username">Användarnamn: </label>
+						<input type="text" name="username" id="username" required>
+					</p>
+					<p>
+						<label for="password">Lösenord: </label>
+						<input type="password" name="password" id="password" required>
+					</p>
+					<p>
+						<label for="password2">Bekräfta Lösenord: </label>
+						<input type="password" name="password2" id="password2" required>
+					</p>
+					<p>
+						<label for="email">E-postadress: </label>
+						<input type="text" name="email" id="email" required>
+					</p>
+					<p>
+						<input type="submit" name="submit" id="submit" value="Slutför">
+					</p>
+				</form>
+			</fieldset>
 		</div>
 	<script src="script.js"></script>
 </body>
