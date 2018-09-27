@@ -1,3 +1,4 @@
+<?php session_start() ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +10,7 @@
 <body>
 		<fieldset>
 			<legend>Logga in</legend>
-			<form action="login.php" method="POST">
+			<form action="index.php" method="POST">
 				<p>
 					<label for="username">Användarnamn: </label>
 					<input type="text" name="username" id="username" required>
@@ -19,15 +20,15 @@
 					<input type="password" name="password" id="password" required>
 				</p>
 				<p>
-					<input type="submit" name="submit" id="submit" value="Logga in">
-					<button onclick="" id="registerbutton">Registrera</button>
+					<input type="submit" name="login" id="submit" value="Logga in">
 				</p>
 			</form>
+				<button onclick="" id="registerbutton">Registrera</button>
 		</fieldset>
 		<div id="register">   
 			<fieldset>
 				<legend>Registrera</legend>
-				<form action="register.php" method="POST">
+				<form action="index.php" method="POST">
 					<p>
 						<label for="username">Användarnamn: </label>
 						<input type="text" name="username" id="username" required>
@@ -45,11 +46,80 @@
 						<input type="text" name="email" id="email" required>
 					</p>
 					<p>
-						<input type="submit" name="submit" id="submit" value="Slutför">
+						<input type="submit" name="register" id="submit" value="Slutför">
 					</p>
 				</form>
 			</fieldset>
 		</div>
 	<script src="script.js"></script>
+
+	<?php
+	if(isset($_POST['login']))
+		login();
+	else if(isset($_POST['register']))
+		register();
+
+
+	function login(){
+		include 'pdo.php';
+		$username = preg_replace("/[^a-zA-Z0-9]+/", "", $_POST["username"]);
+	 	$statement = $pdo -> query('SELECT * FROM login WHERE username = "' . $username .'"');
+	 	$row = $statement -> fetch(PDO::FETCH_ASSOC);
+	 	$password = $row['password'];
+		if(isset($_POST['password']) && isset($password)){
+			if(password_verify($_POST['password'],$password)){
+				$_SESSION["loginId"] = $row["id"];
+				$_SESSION["loginUser"] = $row["username"];
+				header("Location: loggedIn.php");
+    			exit;
+			} else{
+				echo "Wrong password or username";
+			}
+		}
+		else{
+			echo "Wrong password or username";
+		}
+		
+	}
+
+	function register(){
+		include "pdo.php";
+
+		$stmt = $pdo->prepare("INSERT INTO login (username, email, password) VALUES (:username, :email, :password)");
+		$stmt->bindParam(':username', $username);
+		$stmt->bindParam(':email', $email);
+		$stmt->bindParam(':password', $password);
+
+		if($_POST["password"] == $_POST["password2"])
+			$password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+		else{
+			$message = "Lösenorden matchade ej";
+			echo "<script type='text/javascript'>alert('$message');</script>";
+			unset($_POST["register"]);
+			return;
+		}
+
+		if(filter_var($_POST["username"], FILTER_VALIDATE_REGEXP,
+		   array("options"=>array("regexp"=>"/[^a-zA-Z0-9]+/")))){
+			$message = "Okorekt användarnamn";
+			echo "<script type='text/javascript'>alert('$message');</script>";
+			unset($_POST["register"]);
+			return;
+		}
+
+		$username = $_POST["username"];
+
+		if($email = filter_var($_POST["email"], FILTER_VALIDATE_EMAIL));
+		else{
+			$message = "Okorekt email";
+			echo "<script type='text/javascript'>alert('$message');</script>";
+			unset($_POST["register"]);
+			return;
+		}
+
+		$stmt->execute();
+
+	}
+?>
 </body>
 </html>

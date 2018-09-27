@@ -2,9 +2,6 @@
 
 	include "pdo.php";
 
-	
-
-
 	$stmt = $pdo->prepare("INSERT INTO login (username, email, password) VALUES (:username, :email, :password)");
 	$stmt->bindParam(':username', $username);
 	$stmt->bindParam(':email', $email);
