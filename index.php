@@ -61,7 +61,9 @@
 
 
 	function login(){
+		// tänk på att få upp en pdo_example.php utan uppgifterna på git
 		include 'pdo.php';
+		// skulle kunna använda filter_val regexp här med?
 		$username = preg_replace("/[^a-zA-Z0-9]+/", "", $_POST["username"]);
 	 	$statement = $pdo -> query('SELECT * FROM login WHERE username = "' . $username .'"');
 	 	$row = $statement -> fetch(PDO::FETCH_ASSOC);
@@ -83,12 +85,6 @@
 	}
 
 	function register(){
-		include "pdo.php";
-
-		$stmt = $pdo->prepare("INSERT INTO login (username, email, password) VALUES (:username, :email, :password)");
-		$stmt->bindParam(':username', $username);
-		$stmt->bindParam(':email', $email);
-		$stmt->bindParam(':password', $password);
 
 		if($_POST["password"] == $_POST["password2"])
 			$password = password_hash($_POST["password"], PASSWORD_DEFAULT);
@@ -101,12 +97,13 @@
 
 		if(filter_var($_POST["username"], FILTER_VALIDATE_REGEXP,
 		   array("options"=>array("regexp"=>"/[^a-zA-Z0-9]+/")))){
-			$message = "Okorekt användarnamn";
+			$message = "Okorekt användarnamn"; // otillåtet, använd enbart xyz123
 			echo "<script type='text/javascript'>alert('$message');</script>";
 			unset($_POST["register"]);
 			return;
 		}
-
+		// kanske inte den mest läsbara koden då du kör return för att avsluta funktionen och sen kör den vidare.
+		// men det har lite med funktions/metod -design att göra, de bör bara göra en sak
 		$username = $_POST["username"];
 
 		if($email = filter_var($_POST["email"], FILTER_VALIDATE_EMAIL));
@@ -116,7 +113,13 @@
 			unset($_POST["register"]);
 			return;
 		}
+		// sql delen kan lika gärna flyttas till efter validering
+		include "pdo.php";
 
+		$stmt = $pdo->prepare("INSERT INTO login (username, email, password) VALUES (:username, :email, :password)");
+		$stmt->bindParam(':username', $username);
+		$stmt->bindParam(':email', $email);
+		$stmt->bindParam(':password', $password);
 		$stmt->execute();
 
 	}
